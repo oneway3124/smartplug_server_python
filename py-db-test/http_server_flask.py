@@ -1,7 +1,4 @@
 from flask import Flask, request, render_template
-import random
-import string
-import insert_test
 
 app = Flask(__name__)
 
