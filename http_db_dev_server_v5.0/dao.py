@@ -18,8 +18,8 @@ class Dao(object):
     def findData(self,object,skip,limit):
 	    now_time = datetime.datetime.now().strftime('%Y-%m-%d')
 	    readValue = self.daoMethod(now_time+"-powerplug","find",object,skip,limit)
-	    print("result:"+readValue)
-		
+	    #print("result:"+readValue)
+	    return readValue
 #    def daoMethod(self,tabName,method,object):
 #        sendData = SendData()
 #        sendData.tabName = tabName

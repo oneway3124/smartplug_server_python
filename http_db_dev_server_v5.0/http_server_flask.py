@@ -1,5 +1,8 @@
 from flask import Flask, request, render_template
 import random
+from dao import Dao
+from model import PowerPara
+
 app = Flask(__name__)
 
 
@@ -13,6 +16,13 @@ def home():
     li = [230,2,3,4]
     str1=random.randint(0,99)
     print(random.randint(0,99))
+    da = Dao()
+    power_data = PowerPara()
+    #power_data.vol = str(data)
+    #power_data.cur = "123"
+    #power_data.power = "22"
+    str1=da.findData(power_data,2,3)
+    print(str1)
     return render_template('home.html',str=str,li=li,str1=str1)
 	
 @app.route('/signin', methods=['GET'])
