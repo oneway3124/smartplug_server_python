@@ -17,7 +17,9 @@ def tcplink(sock,addr):
 		power_data.vol = str(data)
 		power_data.cur = "123"
 		power_data.power = "22"
-		da.insertData(power_data)
+		da.insertData(power_data,2,3)
+		
+		#da.findData(power_data,2,3)
 		
 		print('Recv,%s'%data)
 	sock.close()
