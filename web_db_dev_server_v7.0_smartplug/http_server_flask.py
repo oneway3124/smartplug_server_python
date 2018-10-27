@@ -14,7 +14,7 @@ app = Flask(__name__)
 def home():
     str = "Vol"
     li = [230,2,3,4]
-    rand1=random.randint(0,300)
+    rand1=random.randint(220,250)
     rand2=random.randint(0,10)
     print(random.randint(0,99))
     da = Dao()

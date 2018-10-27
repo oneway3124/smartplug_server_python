@@ -24,21 +24,22 @@
             },
             tooltip: {},
             legend: {
-                data:['电参数']
+                data:['参数']
             },
             xAxis: {
-                data: ["电压","电流","功率"]
+                data: ["电压","电流","功率","RSSI"]
             },
             yAxis: {},
             series: [{
-                name: '销量',
+                name: '参数',
                 type: 'bar',
-                data: [{{str1}}, {{str2}}, 10]
+                data: [{{str1}}, {{str2}}, 10,60]
             }]
         };
 
         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
     </script>
+	
 </body>
 </html>
