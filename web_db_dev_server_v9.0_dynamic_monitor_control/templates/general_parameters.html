@@ -11,8 +11,28 @@
 <input type=submit value="开关" />
 </form>
 
+<form action="/" method=post>
+<input type=submit value="参数总表" />
+</form>
+
 <form action="/vol" method=post>
 <input type=submit value="电压参数动表" />
+</form>
+
+<form action="/cur" method=post>
+<input type=submit value="电流参数动表" />
+</form>
+
+<form action="/pwr" method=post>
+<input type=submit value="功率参数动表" />
+</form>
+
+<form action="/tmp" method=post>
+<input type=submit value="温度参数动表" />
+</form>
+
+<form action="/rssi" method=post>
+<input type=submit value="RSSI参数动表" />
 </form>
 
 <!--
@@ -41,7 +61,7 @@
             series: [{
                 name: '参数',
                 type: 'bar',
-                data: [{{str1}}, {{str2}}, 10,25,60]
+                data: [{{vol}}, {{cur}}, {{pwr}},{{tmp}},{{rssi}}]
             }]
         };
 

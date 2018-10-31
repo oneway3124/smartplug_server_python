@@ -23,8 +23,13 @@ def home():
     #power_data.cur = "123"
     #power_data.power = "22"
     str2=da.findData(power_data,2,3)
+    vol=random.randint(220,240)
+    cur=random.randint(0,20)
+    pwr=random.randint(0,2)
+    tmp=random.randint(0,40)
+    rssi=random.randint(0,80)
     #print(str1)
-    return render_template('general_parameters.html',str=str,li=li,str1=rand1,str2=rand2)
+    return render_template('general_parameters.html',vol=vol,cur=cur,pwr=pwr,tmp=tmp,rssi=rssi)
 
 	
 @app.route('/signin', methods=['GET'])
@@ -44,8 +49,24 @@ def control():
     return render_template('control.html')
 
 @app.route('/vol', methods=['POST'])
-def general():
+def vol_dis():
     return render_template('vol_parameters.html')
+	
+@app.route('/cur', methods=['POST'])
+def cur_dis():
+    return render_template('cur_parameters.html')	
+
+@app.route('/pwr', methods=['POST'])
+def pwr_dis():
+    return render_template('pwr_parameters.html')	
+
+@app.route('/tmp', methods=['POST'])
+def tmp_dis():
+    return render_template('tmp_parameters.html')	
+
+@app.route('/rssi', methods=['POST'])
+def rssi_dis():
+    return render_template('rssi_parameters.html')	
 	
 if __name__ == '__main__':
    app.run(host="0.0.0.0")
