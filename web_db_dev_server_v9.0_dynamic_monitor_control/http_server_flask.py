@@ -23,6 +23,7 @@ def home():
     #power_data.cur = "123"
     #power_data.power = "22"
     str2=da.findData(power_data,2,3)
+    print(str2)
     vol=random.randint(220,240)
     cur=random.randint(0,20)
     pwr=random.randint(0,2)
