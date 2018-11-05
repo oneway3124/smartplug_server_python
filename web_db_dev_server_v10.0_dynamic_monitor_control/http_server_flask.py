@@ -1,10 +1,10 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, session
 import random
 from dao import Dao
 from model import PowerPara
 
 app = Flask(__name__)
-
+app.config['SECRET_KEY'] = 'hard to guess string'
 
 #@app.route('/<name>')
 #def index(name=None):
@@ -50,10 +50,17 @@ def signin():
 def control():
     return render_template('control.html')
 
-@app.route('/vol', methods=['POST'])
+@app.route('/vol/<name>')
+def vol_dis_par(name):
+    #print("vol page")
+    session['name'] = name
+    #name=230
+    return render_template('vol_parameters.html',name=name)
+
+@app.route('/vol')
 def vol_dis():
     print("vol page")
-    return render_template('vol_parameters.html')
+    return render_template('vol_parameters.html',name=session.get('name'))
 	
 @app.route('/cur', methods=['POST'])
 def cur_dis():
