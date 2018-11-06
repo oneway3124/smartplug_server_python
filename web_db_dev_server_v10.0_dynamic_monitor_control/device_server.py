@@ -7,6 +7,9 @@ import re
 import db_util
 from model import SendData
 from urllib import request,parse
+import redis
+
+r=redis.Redis(host="localhost")
 	
 def sendPost(url,paramName,param):
 	param = param.encode('utf-8')
@@ -31,14 +34,19 @@ def tcplink(sock,addr):
 		power_data.power = "22"
 		da.insertData(power_data,2,3)
 		
+		#push data into redis
+		print(r.rpush("vol_list",power_data.vol))
+		
+		'''
 		#da.findData(power_data,2,3)
 		# send data via url front
+		
 		jsonstr = json.dumps(power_data, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 		jsonstr = re.sub('\\n\s*', '', jsonstr)
 		print('json:'+jsonstr)
 		url_front = "http://120.78.149.124" + ":" + "5000" + "/vol"
 		result = sendPost(url_front, "data", jsonstr)
-		
+		'''
 		print('Recv,%s'%data)
 	sock.close()
 	print('connection from %s:%s closed'%addr)
