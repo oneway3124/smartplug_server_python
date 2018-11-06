@@ -81,24 +81,59 @@ def rssi_dis():
 
 parameters = [
     {
-        'id': 1,
-        'vol': 230,
+        'deviceId': 1,
+        'id':1,
+        'vol': 220,
+        'cur': 21,
+        'pwr': 22,
+        'tmp': 20,
+        'rssi': -65,
+        'description': u'xxx',
+        'action': 1
+    },
+	{
+        'deviceId': 1,
+        'id':2,
+        'vol': 221,
+        'cur': 1,
+        'pwr': 2,
+        'tmp': 20,
+        'rssi': -65,
+        'description': u'xxx',
+        'action': 1
+    },
+	{
+        'deviceId': 1,
+        'id':3,
+        'vol': 223,
         'cur': 2,
         'pwr': 2,
         'tmp': 20,
         'rssi': -65,
         'description': u'xxx',
-        'done': False
+        'action': 1
+    },
+	{
+        'deviceId': 1,
+        'id':4,
+        'vol': 224,
+        'cur': 2,
+        'pwr': 2,
+        'tmp': 20,
+        'rssi': -65,
+        'description': u'xxx',
+        'action': 1
     },
     {
-        'id': 2,
-        'vol': 231,
+        'deviceId': 1,
+		'id':5,
+        'vol': 225,
         'cur': 23,
         'pwr': 2,
         'tmp': 20,
         'rssi': -65,
         'description': u'yyyy',
-        'done': False
+        'action': 1
     }
 ]
 
@@ -110,13 +145,14 @@ def get_tasks():
 ##RESTful API POST	
 @app.route('/smartplug/api/control', methods=['POST'])
 def create_task():
-    if not request.json or not 'vol' in request.json:
+    if not request.json or not 'action' in request.json:
         abort(400)
     parameter = {
+		'deviceId':1,
 		'id': parameters[-1]['id'] + 1,
-		'vol': request.json['vol'],
-		'description': request.json.get('description', ""),
-		'done': False
+		#'vol': request.json['vol'],
+		'action': request.json['action'],
+		'description': request.json.get('description', "")
     }
     parameters.append(parameter)
 	### send redis message to device server
