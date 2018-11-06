@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, session
+from flask import Flask, request, render_template, session, jsonify, abort, make_response
 import random
 from dao import Dao
 from model import PowerPara
@@ -78,7 +78,50 @@ def tmp_dis():
 @app.route('/rssi', methods=['POST'])
 def rssi_dis():
     return render_template('rssi_parameters.html')	
-	
+
+parameters = [
+    {
+        'id': 1,
+        'vol': 230,
+        'cur': 2,
+        'pwr': 2,
+        'tmp': 20,
+        'rssi': -65,
+        'description': u'xxx',
+        'done': False
+    },
+    {
+        'id': 2,
+        'vol': 231,
+        'cur': 23,
+        'pwr': 2,
+        'tmp': 20,
+        'rssi': -65,
+        'description': u'yyyy',
+        'done': False
+    }
+]
+
+##RESTful API GET
+@app.route('/smartplug/api/parameters', methods=['GET'])
+def get_tasks():
+    return jsonify({'parameters': parameters})	
+
+##RESTful API POST	
+@app.route('/smartplug/api/control', methods=['POST'])
+def create_task():
+    if not request.json or not 'vol' in request.json:
+        abort(400)
+    parameter = {
+		'id': parameters[-1]['id'] + 1,
+		'vol': request.json['vol'],
+		'description': request.json.get('description', ""),
+		'done': False
+    }
+    parameters.append(parameter)
+	### send redis message to device server
+    return jsonify({'parameter': parameter}), 201
+
 if __name__ == '__main__':
    app.run(host="0.0.0.0")
    
