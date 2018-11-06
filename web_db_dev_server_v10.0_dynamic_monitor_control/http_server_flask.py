@@ -63,6 +63,7 @@ def vol_dis():
 @app.route('/cur', methods=['POST'])
 def cur_dis():
     print("cur page")
+    name=r.lpop("vol_list")
     print(r.lpop("vol_list"))
     return render_template('cur_parameters.html',name=name)	
 
