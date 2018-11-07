@@ -147,7 +147,7 @@ def get_tasks():
     return jsonify({'parameters': parameters})	
 
 ##RESTful API POST	
-@app.route('/smartplug/api/control', methods=['POST'])
+@app.route('/smartplug/devices/control', methods=['POST'])
 def create_task():
     if not request.json or not 'action' in request.json:
         abort(400)
@@ -162,6 +162,29 @@ def create_task():
 	### send redis message to device server
     return jsonify({'parameter': parameter}), 201
 
+device_stat={}
+
+@app.route('/smartplug/devices_num', methods=['GET'])
+def get_devices_num():
+    device_stat={
+        'error':'succ',
+		'data':
+		[
+			{
+				'address':'jijiaolou',
+				'num':'5',
+				'location':{'lon':'104.087556','lat':'30.637192'}
+			},
+			{
+				'address':'yjsyuan',
+				'num':'6',
+				'location':{'lon':'104.086649','lat':'30.635818'}
+			}
+		]
+    }
+    return jsonify(device_stat)
+
+	
 TODOS = {
     'todo1': {'task': 'build an API'},
     'todo2': {'task': '?????'},
@@ -195,7 +218,6 @@ class Todo(Resource):
         TODOS[todo_id] = task
         return task, 201
 
-
 # TodoList
 # shows a list of all todos, and lets you POST to add new tasks
 class TodoList(Resource):
@@ -212,8 +234,8 @@ class TodoList(Resource):
 ##
 ## Actually setup the Api resource routing here
 ##
-api.add_resource(TodoList, '/todos')
-api.add_resource(Todo, '/todos/<todo_id>')	
+api.add_resource(TodoList, '/smartplug/devices')
+api.add_resource(Todo, '/smartplug/devices/<todo_id>')	
 	
 if __name__ == '__main__':
    app.run(host="0.0.0.0")
