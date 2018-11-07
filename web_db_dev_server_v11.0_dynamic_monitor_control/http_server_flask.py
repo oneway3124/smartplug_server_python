@@ -162,11 +162,8 @@ def create_task():
 	### send redis message to device server
     return jsonify({'parameter': parameter}), 201
 
-device_stat={}
 
-@app.route('/smartplug/devices_num', methods=['GET'])
-def get_devices_num():
-    device_stat={
+device_stat={
         'error':'succ',
 		'data':
 		[
@@ -181,8 +178,11 @@ def get_devices_num():
 				'location':{'lon':'104.086649','lat':'30.635818'}
 			}
 		]
-    }
-    return jsonify(device_stat)
+}
+
+#@app.route('/smartplug/devices_num', methods=['GET'])
+#def get_devices_num():
+#    return jsonify(device_stat)
 
 	
 TODOS = {
@@ -230,12 +230,75 @@ class TodoList(Resource):
         todo_id = 'todo%i' % todo_id
         TODOS[todo_id] = {'task': args['task']}
         return TODOS[todo_id], 201
+		
+class devices_num(Resource):
+    def get(self):
+        return device_stat
 
+devices_info={
+	'error':'0',
+	'data':
+	[
+		{
+			'dev_id':'12345',
+			'desc':'wangwei',
+			'online':'true',
+			'address':'jijiaolou',
+			'location':{'lon':'104.087556','lat':'30.637192'},
+			'owner_info':'wsn'
+		},
+		{
+			'dev_id':'12346',
+			'desc':'wangwei',
+			'online':'true',
+			'address':'jijiaolou',
+			'location':{'lon':'104.087556','lat':'30.637192'},
+			'owner_info':'wsn'
+		}
+	]
+}	
+
+class devices(Resource):
+    def get(self):
+        return devices_info	
+
+device_single={
+	'error':'0',
+	'data':
+	{
+			'dev_id':'12345',
+			'desc':'wangwei',
+			'online':'true',
+			'address':'jijiaolou',
+			'location':{'lon':'104.087556','lat':'30.637192'},
+			'owner_info':'wsn'
+	}
+}	
+class device_id(Resource):
+    def get(self,dev_id):
+        return device_single
+
+vol_info={'vol':['230','231','232','233','234','235','236','237','238','239']}
+	
+class vol_lastest_info(Resource):
+    def get(self,dev_id):
+        return vol_info
+
+cur_info={'cur':['20','21','12','2','34','5','26','7','38','29']}
+	
+class cur_lastest_info(Resource):
+    def get(self,dev_id):
+        return cur_info
 ##
 ## Actually setup the Api resource routing here
 ##
-api.add_resource(TodoList, '/smartplug/devices')
-api.add_resource(Todo, '/smartplug/devices/<todo_id>')	
+api.add_resource(devices_num,'/smartplug/devices_num')
+api.add_resource(devices,'/smartplug/devices')
+api.add_resource(device_id,'/smartplug/devices/<dev_id>')
+api.add_resource(vol_lastest_info,'/smartplug/devices/vol_lastest_info/<dev_id>')
+api.add_resource(cur_lastest_info,'/smartplug/devices/cur_lastest_info/<dev_id>')
+#api.add_resource(TodoList, '/smartplug/devices')
+#api.add_resource(Todo, '/smartplug/devices/<todo_id>')	
 	
 if __name__ == '__main__':
    app.run(host="0.0.0.0")
