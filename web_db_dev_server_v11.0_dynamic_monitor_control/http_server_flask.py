@@ -4,12 +4,13 @@ from dao import Dao
 from model import PowerPara
 import redis
 from flask_restful import reqparse, abort, Api, Resource
-
+from flask_cors import CORS
 
 r=redis.Redis(host="localhost")
 
 app = Flask(__name__)
 api = Api(app)
+CORS(app, resources=r'/*')
 
 app.config['SECRET_KEY'] = 'hard to guess string'
 
