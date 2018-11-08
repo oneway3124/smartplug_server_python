@@ -18,17 +18,22 @@ app.config['SECRET_KEY'] = 'hard to guess string'
 #def index(name=None):
 #   return render_template('hello.html',name=name)
 
-@app.route('/baidu', methods=['GET'])
+@app.route('/baidu.html', methods=['GET'])
 def baidu():
     return render_template('baidu.html')
 
-@app.route('/index', methods=['GET'])
+@app.route('/index.html', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')	
+    #Address = request.form['address']
+    Address = request.args["address"]
+    #return render_template('index.html')	
+    return render_template('index.html',Address=Address)	
    
-@app.route('/detail', methods=['GET'])
+@app.route('/detail.html', methods=['GET'])
 def detail():
-    return render_template('detail.html')
+    type = request.args["type"]
+    deviceId = request.args["deviceId"]
+    return render_template('detail.html',type=type,deviceId=deviceId)
 	
 @app.route('/', methods=['GET', 'POST'])
 def home():
