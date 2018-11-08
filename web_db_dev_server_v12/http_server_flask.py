@@ -354,6 +354,57 @@ cur_info={
 class cur_lastest_info(Resource):
     def get(self,dev_id):
         return cur_info
+
+pwr_info={
+	'error':'0',
+	'data':
+	{
+		'dev_id':'12345',
+		'desc':'wangwei',
+		'online':'true',
+		'location':{'lon':'104.087556','lat':'30.637192'},
+		'pwr':['20','21','12','2','34','5','26','7','38','29'],
+		'owner_info':'wsn'
+	}
+}
+	
+class pwr_lastest_info(Resource):
+    def get(self,dev_id):
+        return pwr_info
+		
+tmp_info={
+	'error':'0',
+	'data':
+	{
+		'dev_id':'12345',
+		'desc':'wangwei',
+		'online':'true',
+		'location':{'lon':'104.087556','lat':'30.637192'},
+		'tmp':['20','21','12','2','34','5','26','7','38','29'],
+		'owner_info':'wsn'
+	}
+}
+	
+class tmp_lastest_info(Resource):
+    def get(self,dev_id):
+        return tmp_info
+
+rssi_info={
+	'error':'0',
+	'data':
+	{
+		'dev_id':'12345',
+		'desc':'wangwei',
+		'online':'true',
+		'location':{'lon':'104.087556','lat':'30.637192'},
+		'tmp':['20','21','12','2','34','5','26','7','38','29'],
+		'owner_info':'wsn'
+	}
+}
+	
+class rssi_lastest_info(Resource):
+    def get(self,dev_id):
+        return rssi_info
 ##
 ## Actually setup the Api resource routing here
 ##
@@ -362,6 +413,9 @@ api.add_resource(devices,'/smartplug/devices')
 api.add_resource(device_id,'/smartplug/devices/<dev_id>')
 api.add_resource(vol_lastest_info,'/smartplug/devices/vol_lastest_info/<dev_id>')
 api.add_resource(cur_lastest_info,'/smartplug/devices/cur_lastest_info/<dev_id>')
+api.add_resource(pwr_lastest_info,'/smartplug/devices/pwr_lastest_info/<dev_id>')
+api.add_resource(tmp_lastest_info,'/smartplug/devices/tmp_lastest_info/<dev_id>')
+api.add_resource(rssi_lastest_info,'/smartplug/devices/rssi_lastest_info/<dev_id>')
 api.add_resource(device_control,'/smartplug/device/control/<dev_id>')
 	
 if __name__ == '__main__':
