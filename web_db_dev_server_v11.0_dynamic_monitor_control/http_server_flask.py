@@ -147,6 +147,7 @@ def get_tasks():
     return jsonify({'parameters': parameters})	
 
 ##RESTful API POST	
+'''
 @app.route('/smartplug/devices/control', methods=['POST'])
 def create_task():
     if not request.json or not 'action' in request.json:
@@ -161,7 +162,7 @@ def create_task():
     parameters.append(parameter)
 	### send redis message to device server
     return jsonify({'parameter': parameter}), 201
-
+'''
 
 device_stat={
         'error':'succ',
@@ -236,7 +237,7 @@ class devices_num(Resource):
         return device_stat
 
 devices_info={
-	'error':'0',
+	'error':'succ',
 	'data':
 	[
 		{
@@ -263,7 +264,7 @@ class devices(Resource):
         return devices_info	
 
 device_single={
-	'error':'0',
+	'error':'succ',
 	'data':
 	{
 			'dev_id':'12345',
@@ -271,6 +272,12 @@ device_single={
 			'online':'true',
 			'address':'jijiaolou',
 			'location':{'lon':'104.087556','lat':'30.637192'},
+			'vol':'230',
+			'cur':'2',
+			'pwr':'10',
+			'tmp':'25',
+			'rssi':'-65',
+			'action':'on',
 			'owner_info':'wsn'
 	}
 }	
@@ -278,13 +285,51 @@ class device_id(Resource):
     def get(self,dev_id):
         return device_single
 
-vol_info={'vol':['230','231','232','233','234','235','236','237','238','239']}
+control_response={
+	'error':'succ'
+}		
+class device_control(Resource):
+    def put(self, dev_id):
+        args = parser.parse_args()
+        task = {'action': args['action']}
+        TODOS[dev_id] = task
+        return task, 201
+    def post(self,dev_id):
+        args = parser.parse_args()
+        dev_id = int(max(TODOS.keys()).lstrip('todo')) + 1
+        dev_id = 'todo%i' % dev_id
+        TODOS[dev_id] = {'task': args['task']}
+        return control_response
+
+vol_info={
+	'error':'0',
+	'data':
+	{
+		'dev_id':'12345',
+		'desc':'wangwei',
+		'online':'true',
+		'location':{'lon':'104.087556','lat':'30.637192'},
+		'vol':['230','231','232','233','234','235','236','237','238','239'],
+		'owner_info':'wsn'
+	}
+}
 	
 class vol_lastest_info(Resource):
     def get(self,dev_id):
         return vol_info
 
-cur_info={'cur':['20','21','12','2','34','5','26','7','38','29']}
+cur_info={
+	'error':'0',
+	'data':
+	{
+		'dev_id':'12345',
+		'desc':'wangwei',
+		'online':'true',
+		'location':{'lon':'104.087556','lat':'30.637192'},
+		'cur':['20','21','12','2','34','5','26','7','38','29'],
+		'owner_info':'wsn'
+	}
+}
 	
 class cur_lastest_info(Resource):
     def get(self,dev_id):
@@ -297,8 +342,7 @@ api.add_resource(devices,'/smartplug/devices')
 api.add_resource(device_id,'/smartplug/devices/<dev_id>')
 api.add_resource(vol_lastest_info,'/smartplug/devices/vol_lastest_info/<dev_id>')
 api.add_resource(cur_lastest_info,'/smartplug/devices/cur_lastest_info/<dev_id>')
-#api.add_resource(TodoList, '/smartplug/devices')
-#api.add_resource(Todo, '/smartplug/devices/<todo_id>')	
+api.add_resource(device_control,'/smartplug/device/control/<dev_id>')
 	
 if __name__ == '__main__':
    app.run(host="0.0.0.0")
