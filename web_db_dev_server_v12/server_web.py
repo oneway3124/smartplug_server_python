@@ -80,8 +80,11 @@ def control():
 @app.route('/vol', methods=['POST'])
 def vol_dis():
     print("vol page")
+	#b"b'vol:0231  \\x00'"
     name=r.lpop("vol_list")
-    print(r.lpop("vol_list"))
+    print(name)
+    name = name[6:10]
+    print(name)
     return render_template('vol_parameters.html',name=name)
 	
 @app.route('/cur', methods=['POST'])

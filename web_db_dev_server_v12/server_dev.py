@@ -23,6 +23,8 @@ def tcplink(sock,addr):
 	#sock.send('welcome!')
 	while True:
 		data=sock.recv(1024)
+		#print('Original Recv,%s'%data)
+		#data=data[7:4]
 		time.sleep(1)
 		if data=='exit' or not data:
 		    break
