@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+		<title>地图</title>
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=kC6jIkAhefKlmEVbeecM5InAnPYNZHw7"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+		<script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
+		<style type="text/css">  
+		    html{height:100%;margin:0px;padding:0px}    
+		    body{height:100%;margin:0px;padding:0px}    
+		    #container{
+		    	height:94%;		   
+		    	}
+		    .section{
+            padding: 0.5rem;
+            height: 6%;
+            background: hsl(171, 100%, 41%);
+      }    
+		</style> 
+	</head>
+	<body style="overflow: hidden;">
+	   <section class="section">
+	        <div class="level is-mobile">
+	            <div class="level-left">
+	                <span class="icon">
+	                    <i class="fa fa-lg fa-camera-retro" style="color:  hsl(0, 0%, 96%);"></i>
+	                </span>
+	            </div>
+	            <div class="level-item has-text-centered">
+	            	<p style="font-size: 1.1em;font-weight: bold;color: hsl(0, 0%, 96%);">智能插座</p>  
+	            </div>
+	             <div class="level-right">
+	                <span class="icon">
+	                    <i class="fa fa-lg fa-user-circle" style="color:  hsl(0, 0%, 96%);"></i>
+	                </span>
+	            </div>
+	        </div>
+        </section>
+				
+		<div id="container"></div> 
+		
+	
+		
+		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+		<script type="text/javascript">
+			var baseUrl = "http://120.78.149.124:5000";
+		</script>
+		<script type="text/javascript">
+						
+	      var map = new BMap.Map("container");
+	      
+	      var mapStyle={  style : 'googlelite' }  
+          map.setMapStyle(mapStyle);
+	      
+	      var point = new BMap.Point(104.087556, 30.637192); 
+	      map.centerAndZoom(point, 18); 
+	      map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+	      
+	      map.addControl(new BMap.NavigationControl());
+		  map.addControl(new BMap.ScaleControl());    
+		  map.addControl(new BMap.OverviewMapControl()); 
+		  
+		  //个性化图标
+		  function addMarker(point, index, content, address){  // 创建图标对象   
+		    var myIcon = new BMap.Icon("../static/m_gray.png", new BMap.Size(40, 40), {    		     
+		        anchor: new BMap.Size(1, 1),    
+		    });  
+		    var myShineIcon = new BMap.Icon("../static/m.png", new BMap.Size(40, 40), {    		     
+		        anchor: new BMap.Size(1, 1),    
+		    }); 
+		    
+		    
+		    // 创建标注对象并添加到地图   
+		    var marker = new BMap.Marker(point, {icon: myIcon});  
+		    if (index == 0) {
+		    	marker.setIcon(myShineIcon);
+		    }
+		    var label = new BMap.Label(content,{offset:new BMap.Size(15, 40)});
+		    label.setStyle({color:"#0a0a0a",fontSize:"1.3rem",fontWeight:"bold",backgroundColor:"transparent",border:"none"});
+		    marker.setLabel(label);
+		    
+		    marker.addEventListener("click",function(e){
+		    	e.target.setIcon(myShineIcon);
+		    	window.open("index.html?address="+address,"_self");
+		    });
+		    
+		    map.addOverlay(marker); 
+		 } 
+		 
+		 //获取数据并且添加到地图
+		 function getDevices_num(){
+				$.ajax({
+					type:"GET",
+					url:baseUrl+"/smartplug/devices_num",
+					dataType:"json",
+					success:function(data){						
+						data.data.forEach(function(ele, index){
+							var pot = new BMap.Point(parseFloat(ele.location.lon),parseFloat(ele.location.lat));  
+							addMarker(pot, index, ele.num, ele.address);							
+						});
+					}
+				})
+			}
+		 getDevices_num();
+		 
+			//获取地理位置
+		/*  var geolocation = new BMap.Geolocation();
+		  geolocation.getCurrentPosition(function(r){
+				if(this.getStatus() == BMAP_STATUS_SUCCESS){					
+					//addMarker(r.point,0,"您的位置");					
+					var marker = new BMap.Marker(r.point);        
+                    map.addOverlay(marker); 
+                    map.panTo(r.point);
+					//console.log('您的位置：'+r.point.lng+','+r.point.lat);
+				}
+				else {
+					console.log('failed'+this.getStatus());
+				}        
+		  });*/
+		 
+		 
+		                 
+	     
+	 
+         
+		
+			
+		</script>
+	</body>
+</html>

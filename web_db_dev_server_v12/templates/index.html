@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>主要页面</title>
+    <link rel="icon" href="" type="image/gif">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/4.2.0-rc.2/echarts-en.common.js"></script>
+    <style>
+        .section{
+            padding: 1.5rem;
+        }       
+    </style>
+
+</head>
+<body>
+    <section class="section">
+        <div class="level is-mobile">
+            <div class="level-left">
+                <span class="icon">
+                    <i class="fa fa-lg fa-arrow-left"></i>
+                </span>
+            </div>
+        </div>
+        <div class="container content">
+            <h4 class="has-text-centered">基础教学楼</h4>
+        </div>
+        <hr />
+        <div class="columns is-mobile">
+		  <div class="column is-full" style="display: flex; align-items: center; justify-content: center;">
+		  	    <div id="clickbutton" class="dropdown">
+					  <div class="dropdown-trigger">
+					    <button  class="button is-primary" aria-haspopup="true" aria-controls="dropdown-menu">
+					      <span style="width: 13rem;">插座A34000</span>
+					      <span class="icon is-small">
+					        <i class="fas fa-angle-down" aria-hidden="true"></i>
+					      </span>
+					    </button>
+					  </div>
+					  <div class="dropdown-menu" id="dropdown-menu" role="menu" style="width: 15.5rem;">
+					    <div class="dropdown-content">
+					      <a href="#" class="dropdown-item">
+					                          插座A34001
+					      </a>
+					      <hr class="dropdown-divider">
+					      <a href="#" class="dropdown-item">
+					                            插座A34002
+					      </a>
+					      <hr class="dropdown-divider">
+					      <a href="#" class="dropdown-item">
+					                             插座A34003
+					      </a>		    
+					    </div>
+					  </div>
+				</div>
+		  </div>
+		</div>
+        <br />
+        <div class="columns is-mobile">
+        	<div class="column is-full" style="display: flex; align-items: center; justify-content: center;">        		
+        		 <table class="table is-hoverable">
+        		 	<caption style="font-size: 1rem;">插座：A34002</caption>
+        		 	<thead><tr>
+        		 		<th>参数</th>
+        		 		<th>数值</th>
+        		 	</tr></thead>
+        		 	<tbody>
+        		 		<tr>
+        		 			<td><a href="">VOL</a></td>
+        		 			<td>345.5</td>
+        		 		</tr>
+        		 		<tr>
+        		 			<td><a href="">CUR</a></td>
+        		 			<td>345.5</td>
+        		 		</tr>        		 		
+        		 		<tr>
+        		 			<td><a href="">PWR</a></td>
+        		 			<td>345.5</td>
+        		 		</tr>
+        		 		<tr>
+        		 			<td><a href="">TMP</a></td>
+        		 			<td>345.5</td>
+        		 		</tr>
+        		 		<tr>
+        		 			<td><a href="">RSSI</a></td>
+        		 			<td>345.5</td>
+        		 		</tr>
+        		 	</tbody>       		 	
+        		 </table>
+        	</div>
+        </div>
+        <br />
+        
+         <div class="columns is-mobile">
+         	<div class="column is-two-thirds" >
+        		
+        	</div>
+        	<div class="column is-one-third" >
+        		<button class="button is-primary is-outlined">开关:OFF</button>
+        	</div>
+        </div>
+        
+    
+ </section>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<script type="text/javascript">
+	var baseUrl = "http://120.78.149.124:5000";
+</script>
+<script type="text/javascript">
+	var buttonmenu = $('#clickbutton');
+	buttonmenu.click(function(){
+		$(this).toggleClass('is-active');
+	});
+	
+	var backIcon = $('.level-left span');
+	backIcon.click(()=>{
+	     history.back();	
+	});
+	
+	//在地址里面获取当前的参数address
+	var address = location.search.substring(location.search.indexOf("=")+1);
+	$('.dropdown-content').empty();
+	
+	function show(device_id, online){
+		$.ajax({
+		type:"get",
+		url:baseUrl+"/smartplug/devices/"+device_id,
+		async:true,
+		dataType:"json",
+		success:function(data){
+			$('table caption').text("插座 "+device_id);
+			$('table tbody').empty();
+			$('table tbody').append(`
+				        <tr>
+				        	<td><a href="detail.html?type=vol&deviceId=${device_id}">VOL</a></td>
+				        	<td>${data.data.vol}</td>
+				        </tr>
+				        <tr>
+				        	<td><a href="detail.html?type=cur&deviceId=${device_id}">CUR</a></td>
+				        	<td>${data.data.cur}</td>
+        		 		</tr>
+        		 		<tr>
+        		 			<td><a href="detail.html?type=pwr&deviceId=${device_id}">PWR</a></td>
+        		 			<td>${data.data.pwr}</td>
+        		 		</tr>
+        		 		<tr>
+        		 			<td><a href="detail.html?type=tmp&deviceId=${device_id}">TMP</a></td>
+        		 			<td>${data.data.tmp}</td>
+        		 		</tr>
+        		 		<tr>
+        		 			<td><a href="detail.html?type=rssi&deviceId=${device_id}">RSSI</a></td>
+        		 			<td>${data.data.rssi}</td>
+        		 		</tr>`);
+        	$('.column.is-one-third button').text("开关:"+online);
+		}
+		
+	  });
+	}
+	
+	$.ajax({
+		type:"get",
+		url: baseUrl+"/smartplug/devices",
+		async:true,
+		dataType:"json",
+		data:{
+			address:address
+		},
+		success:function(data){
+			//初始化
+			$('.dropdown-content').empty();
+			$('.dropdown-trigger button span').first().text("插座 "+data.data[0].dev_id);
+			$('.column.is-one-third button').text("开关:"+"OFF");
+			//初始显示数据
+			show(data.data[0].dev_id,"OFF");
+			
+			data.data.forEach(function(ele, index){
+				if(index == data.data.length-1){
+					$('.dropdown-content').append(`<a href="#" class="dropdown-item" deviceId=${ele.dev_id} online=${ele.online}>插座 ${ele.dev_id}</a>`);
+				}else{
+					$('.dropdown-content').append(`<a href="#" class="dropdown-item" deviceId=${ele.dev_id} online=${ele.online}>插座 ${ele.dev_id}</a><hr class="dropdown-divider">`);
+				}				
+			});
+			
+			//点击面板后激活
+			$('.dropdown-content').click(function(e){
+				if (e.target.tagName == 'A'){
+					var value = $(e.target).attr('deviceId');
+					var online = $(e.target).attr('online');
+					online = online == "true" ? "ON" : "OFF";
+					$('.dropdown-trigger button span').first().text("插座 "+value);
+					show(value,online);
+				}
+			});
+			
+		}
+	});
+	
+	
+</script>
+
+</body>
+</html>
