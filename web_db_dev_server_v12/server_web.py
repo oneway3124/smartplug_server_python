@@ -339,6 +339,41 @@ vol_info={
 	
 class vol_lastest_info(Resource):
     def get(self,dev_id):
+        name=r.lpop("vol_list")
+        print(name)
+        name = name[6:10]
+        print(name) 
+        name = str(name,encoding="utf-8")
+        print(name)
+        vol_lastest=[]
+        vol_lastest.append(name)
+        for i in range(9):
+            name=r.lpop("vol_list")
+            print(name)
+            name = name[6:10]
+            print(name) 
+            name = str(name,encoding="utf-8")
+            print(name)
+            #vol_lastest=vol_lastest+','+str(name)
+            vol_lastest.append(name)
+            #print(vol_lastest)
+            #vol_lastest.split(''b')
+            print(vol_lastest)
+        #vol_lastest.split(',')
+        print(vol_lastest)
+		
+        vol_info={
+			'error':'0',
+			'data':
+            {
+			    'dev_id':'12345',
+			    'desc':'wangwei',
+			    'online':'true',
+			    'location':{'lon':'104.087556','lat':'30.637192'},
+			    'vol':vol_lastest,
+			    'owner_info':'wsn'
+            }
+        }
         return vol_info
 
 cur_info={
