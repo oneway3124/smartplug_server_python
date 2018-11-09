@@ -336,30 +336,23 @@ vol_info={
 		'owner_info':'wsn'
 	}
 }
-	
-class vol_lastest_info(Resource):
-    def get(self,dev_id):
+'''
         name=r.lpop("vol_list")
         print(name)
         name = name[6:10]
         print(name) 
         name = str(name,encoding="utf-8")
         print(name)
+		'''	
+class vol_lastest_info(Resource):
+    def get(self,dev_id):
         vol_lastest=[]
-        vol_lastest.append(name)
-        for i in range(9):
+        #vol_lastest.append(name)
+        for i in range(10):
             name=r.lpop("vol_list")
-            print(name)
             name = name[6:10]
-            print(name) 
             name = str(name,encoding="utf-8")
-            print(name)
-            #vol_lastest=vol_lastest+','+str(name)
             vol_lastest.append(name)
-            #print(vol_lastest)
-            #vol_lastest.split(''b')
-            print(vol_lastest)
-        #vol_lastest.split(',')
         print(vol_lastest)
 		
         vol_info={
