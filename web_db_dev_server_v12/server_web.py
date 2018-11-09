@@ -308,21 +308,7 @@ class device_id(Resource):
     def get(self,dev_id):
         return device_single
 
-control_response={
-	'error':'succ'
-}		
-class device_control(Resource):
-    def put(self, dev_id):
-        args = parser.parse_args()
-        task = {'action': args['action']}
-        TODOS[dev_id] = task
-        return task, 201
-    def post(self,dev_id):
-        args = parser.parse_args()
-        dev_id = int(max(TODOS.keys()).lstrip('todo')) + 1
-        dev_id = 'todo%i' % dev_id
-        TODOS[dev_id] = {'task': args['task']}
-        return control_response
+
 
 vol_info={
 	'error':'0',
@@ -436,6 +422,19 @@ rssi_info={
 class rssi_lastest_info(Resource):
     def get(self,dev_id):
         return rssi_info
+		
+control_response={
+	'error':'succ'
+}		
+class device_control(Resource):
+    def get(self):
+        return control_response
+		
+    def post(self):
+        args = parser.parse_args()
+		#push data into redis
+        print(r.rpush("action","off"))
+        return control_response,201
 ##
 ## Actually setup the Api resource routing here
 ##
@@ -447,7 +446,7 @@ api.add_resource(cur_lastest_info,'/smartplug/devices/cur_lastest_info/<dev_id>'
 api.add_resource(pwr_lastest_info,'/smartplug/devices/pwr_lastest_info/<dev_id>')
 api.add_resource(tmp_lastest_info,'/smartplug/devices/tmp_lastest_info/<dev_id>')
 api.add_resource(rssi_lastest_info,'/smartplug/devices/rssi_lastest_info/<dev_id>')
-api.add_resource(device_control,'/smartplug/device/control/<dev_id>')
+api.add_resource(device_control,'/smartplug/device/control')
 	
 if __name__ == '__main__':
    app.run(host="0.0.0.0")

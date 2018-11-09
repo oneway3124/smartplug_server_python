@@ -110,6 +110,7 @@
 	var baseUrl = "http://120.78.149.124:5000";
 </script>
 <script type="text/javascript">
+	var deviceId;
 	var buttonmenu = $('#clickbutton');
 	buttonmenu.click(function(){
 		$(this).toggleClass('is-active');
@@ -117,12 +118,28 @@
 	
 	var backIcon = $('.level-left span');
 	backIcon.click(()=>{
-	     history.back();	
+	     history.back();
 	});
 	
 	//在地址里面获取当前的参数address
 	var address = location.search.substring(location.search.indexOf("=")+1);
 	$('.dropdown-content').empty();
+	var data = {deviceId: deviceId};
+	$('.column.is-one-third button').click(function(){
+			//alert(deviceId);
+			$.ajax({
+			type:"post",
+			url:baseUrl+"/smartplug/device/control",
+			//data: data,
+			async:true,
+			success:function(data){
+				alert(data);
+			}
+			
+		  });
+		}
+	)
+	
 	
 	function show(device_id, online){
 		$.ajax({
@@ -169,10 +186,12 @@
 			address:address
 		},
 		success:function(data){
+			deviceId = data.data[0].dev_id;
+			//alert(deviceId);
 			//初始化
 			$('.dropdown-content').empty();
 			$('.dropdown-trigger button span').first().text("插座 "+data.data[0].dev_id);
-			$('.column.is-one-third button').text("开关:"+"OFF");
+			//$('.column.is-one-third button').text("开关:"+"OFF");
 			//初始显示数据
 			show(data.data[0].dev_id,"OFF");
 			
