@@ -425,15 +425,23 @@ class rssi_lastest_info(Resource):
 		
 control_response={
 	'error':'succ'
-}		
+}	
+	
 class device_control(Resource):
     def get(self):
         return control_response
 		
     def post(self):
+        
         args = parser.parse_args()
-		#push data into redis
-        print(r.rpush("action","off"))
+       
+        #push data into redis
+        #if var%2==0:
+        #print('------')
+        print(r.rpush("action","on"))
+        #elif var%2==1:
+        #print('+++++++')
+        #print(r.rpush("action","off"))
         return control_response,201
 ##
 ## Actually setup the Api resource routing here

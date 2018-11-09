@@ -51,10 +51,12 @@ def tcplink(sock,addr):
 		#pop data from redis
 		action_data_from_redis=r.lpop("action")
 		if action_data_from_redis != 'None':
+			print('can send action off')
 			print(action_data_from_redis)
 			#sock.send('Hello,%s'%data)
 			sock.send("action:off".encode())
 		else:
+			print('can send action on')
 			print(action_data_from_redis)
 			sock.send("action:on".encode())
 			print('None')
