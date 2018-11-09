@@ -8,6 +8,7 @@ import db_util
 from model import SendData
 from urllib import request,parse
 import redis
+import string
 
 r=redis.Redis(host="localhost")
 	
@@ -30,15 +31,23 @@ def tcplink(sock,addr):
 		    break
 		#sock.send('Hello,%s'%data)
 		#sock.send("Hello".encode())
+		data=str(data,encoding="utf-8")
+		data=data[:8]
+		if data.find('vol')!= -1:
+		    print('this is vol value')
+		    print(r.rpush("vol_list",data))
+		elif data.find('cur')!= -1:
+		    print('this is cur value')
+		    print(r.rpush("cur_list",data))
 		da = Dao()
 		power_data = PowerPara()
-		power_data.vol = str(data)
+		power_data.vol = data
 		power_data.cur = "123"
 		power_data.power = "22"
 		da.insertData(power_data,2,3)
-		
+		#print('before redis operation')
 		#push data into redis
-		print(r.rpush("vol_list",power_data.vol))
+		#print(r.rpush("vol_list",'230'))
 		#pop data from redis
 		action_data_from_redis=r.lpop("action")
 		if action_data_from_redis != 'None':

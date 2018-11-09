@@ -350,7 +350,7 @@ class vol_lastest_info(Resource):
         #vol_lastest.append(name)
         for i in range(10):
             name=r.lpop("vol_list")
-            name = name[6:10]
+            name = name[4:8]
             name = str(name,encoding="utf-8")
             vol_lastest.append(name)
         print(vol_lastest)
