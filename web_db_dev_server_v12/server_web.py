@@ -432,16 +432,10 @@ class device_control(Resource):
         return control_response
 		
     def post(self):
-        
         args = parser.parse_args()
-       
         #push data into redis
-        #if var%2==0:
-        #print('------')
+        print('redis action on')
         print(r.rpush("action","on"))
-        #elif var%2==1:
-        #print('+++++++')
-        #print(r.rpush("action","off"))
         return control_response,201
 ##
 ## Actually setup the Api resource routing here
