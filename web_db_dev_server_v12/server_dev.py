@@ -21,6 +21,7 @@ def tcplink(sock,addr):
 		    break
 		#sock.send('Hello,%s'%data)
 		#sock.send("Hello".encode())
+		print(data)
 		data=str(data,encoding="utf-8")
 		data=data[:8]
 		print('Recv,%s'%data)
@@ -38,12 +39,27 @@ def tcplink(sock,addr):
 		da.insertData(power_data,2,3)
 		#pop data from redis
 		action_data_from_redis=r.lpop("action")
-		if action_data_from_redis != 'None':
-			sock.send("action:off".encode())
-			print('off')
+		#control_str = str(action_data_from_redis,encoding="utf-8")
+		print(action_data_from_redis)
+		#action_data_from_redis=str(action_data_from_redis,encoding="utf-8")
+		
+		#print(action_data_from_redis)
+		if action_data_from_redis is None:
+		    sock.send("action:off".encode())
+		    print('this is a none')
 		else:
-			sock.send("action:on".encode())
-			print('on')
+		    bytes.decode(action_data_from_redis)
+		    print(action_data_from_redis)
+		    sock.send("action:on".encode())
+		    print('this is a on')
+		#data_1=str(action_data_from_redis,encoding="utf-8")
+		#print(data_1)
+		#if data_1 == 'off':
+		#    sock.send("action:off".encode())
+		#    print('off')
+		#if data_1 == 'on':
+		#    sock.send("action:on".encode())
+		#    print('on')
 			
 	sock.close()
 	print('connection from %s:%s closed'%addr)
