@@ -1,2 +1,0 @@
-1.实现设备的接收Socket数据来自智能插座的
-2.搭建一个python web flask的框架用于测试
