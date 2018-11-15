@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>参数详情</title>
+    <link rel="icon" href="" type="image/gif">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/4.2.0-rc.2/echarts-en.common.js"></script>
+    <style>
+        .section{
+            padding: 1.5rem;
+        }
+        
+    </style>
+
+</head>
+<body>
+    <section class="section">
+        <div class="level is-mobile">
+            <div class="level-left">
+                <span class="icon">
+                    <i class="fa fa-lg fa-arrow-left"></i>
+                </span>
+            </div>
+        </div>
+        <div class="container content">
+            <h4 class="has-text-centered">RSSI数值</h4>
+        </div>
+       <hr />
+        <div class="columns is-mobile">
+        	<div class="column is-full" style="display: flex; align-items: center; justify-content: center;">
+        		 <div id="paint" style="width: 21rem;height:18rem;">       		 	
+        		 </div>
+        	</div>
+        </div>
+        <br />
+ 
+ </section>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+
+<script type="text/javascript">
+	var baseUrl = "http://120.78.149.124:5000";
+	var backIcon = $('.level-left span');
+	backIcon.click(()=>{
+	     history.back();	
+	});
+	var arr = location.search.substr(1).split('&');
+	var type = "vol";
+	var deviceId = "12345";
+	if(arr.length == 2){
+		type = arr[0].split('=')[1];
+	    deviceId = arr[1].split('=')[1];
+	}
+	
+	$('h4').text(type.toUpperCase()+"数值");
+		
+	var myChart = echarts.init(document.getElementById('paint'));
+	var colorAlbum = ['#00d1b2','#3273dc','#209cee','#23d160','#ffdd57','#e83357','#c23531','#2f4554', '#61a0a8', '#d48265', '#91c7ae','#749f83',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3'];
+	var rand = Math.floor(Math.random()*colorAlbum.length); 
+</script>
+
+
+
+<script type="text/javascript">
+	function getData(){	
+		$.ajax({
+			type:"get",
+			url:baseUrl+"/smartplug/devices/"+type+"_lastest_info/"+deviceId,
+			async:true,
+			dataType:"json",
+			success:function(data){
+				var dataList = data.data[type];
+				plot(dataList);
+			}
+		   });
+		}	
+</script>
+
+<script type="text/javascript">
+	
+   function plot(data){
+   	    var xAxisData = [];	
+   	    var colorList = [];
+   	    colorList.push(colorAlbum[rand]);
+		for (var i = 0; i < data.length; i++) {
+		    xAxisData.push('时间' + i);	  
+		}		
+		var option = {
+		    title: {
+		        text: type.toUpperCase()
+		    },
+		    color:colorList,
+		    xAxis: {
+		        data: xAxisData,
+		        silent: false,
+		        splitLine: {
+		            show: false
+		        }
+		    },
+		    yAxis: {
+		    	min:'dataMin'
+		    },
+		    series: [{
+		        name: 'bar',
+		        type: 'bar',
+		        data: data,
+		        animationDelay: function (idx) {
+		            return idx * 10;
+		        }
+		    }],
+		    animationEasing: 'elasticOut',
+		    animationDelayUpdate: function (idx) {
+		        return idx * 5;
+		    }
+		};
+		myChart.setOption(option);
+   }
+   
+   getData();
+
+
+
+</script>
+</body>
+</html>
