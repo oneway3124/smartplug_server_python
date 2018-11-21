@@ -5,6 +5,8 @@ from model import PowerPara
 import redis
 from flask_restful import reqparse, abort, Api, Resource
 from flask_cors import CORS
+import string
+import json
 
 r=redis.Redis(host="localhost")
 
@@ -221,7 +223,7 @@ def abort_if_todo_doesnt_exist(todo_id):
         abort(404, message="Todo {} doesn't exist".format(todo_id))
 
 parser = reqparse.RequestParser()
-parser.add_argument('task')
+parser.add_argument('action')
 
 
 # Todo
@@ -326,7 +328,7 @@ class device_id(Resource):
 			    'pwr':'10',
 			    'tmp':'25',
 			    'rssi':'-65',
-			    'rely':relay_state,
+			    #'rely':relay_state,
 			    'action':'on',
 			    'owner_info':'wsn'			
             }
@@ -458,9 +460,24 @@ class device_control(Resource):
 		
     def post(self):
         args = parser.parse_args()
+		#{'task': args['task']}
+        print('args=%s'%args)
+        encode_json=json.dumps(args)
+        print(type(encode_json))
+        print(encode_json)
+        y = json.loads(encode_json)
+        if(y["action"] == 'on'):
+            print('redis action on')
+            print(r.rpush("action","on"))
+        else:
+            print('redis action off')
+            print(r.rpush("action","off"))
+        #print(args.find('on'))
+        #print('%s'%args[10:12])
         #push data into redis
-        print('redis action on')
-        print(r.rpush("action","on"))
+        #if args[]=='{'action': 'on'}':
+        #    print('redis action on')
+        #print(r.rpush("action","on"))
         return control_response,201
 ##
 ## Actually setup the Api resource routing here

@@ -55,17 +55,27 @@ def tcplink(sock,addr):
 		action_data_from_redis=r.lpop("action")
 		#control_str = str(action_data_from_redis,encoding="utf-8")
 		print(action_data_from_redis)
-		#action_data_from_redis=str(action_data_from_redis,encoding="utf-8")
 		
-		#print(action_data_from_redis)
+		#print("%s"%str(action_data_from_redis,encoding="utf-8"))
+		
+		
 		if action_data_from_redis is None:
-		    sock.send("action:off".encode())
+		    #sock.send("action:off".encode())
 		    print('this is a none')
 		else:
-		    bytes.decode(action_data_from_redis)
-		    print(action_data_from_redis)
-		    sock.send("action:on".encode())
-		    print('this is a on')
+		    action_data=str(action_data_from_redis,encoding="utf-8")
+		    print(action_data)
+		    if (action_data=='off'):  #socket send data to device 'off'
+		        sock.send("action:off".encode())
+		        print('this is a off')
+		    if (action_data=='on'):  #socket send data to device 'on'
+		        sock.send("action:on".encode())
+		        print('this is a on')
+		#else:  
+		    #bytes.decode(action_data_from_redis)
+		    #print(action_data_from_redis)
+		    #sock.send("action:on".encode())
+		#    print('this is a other')
 		#data_1=str(action_data_from_redis,encoding="utf-8")
 		#print(data_1)
 		#if data_1 == 'off':
