@@ -23,17 +23,31 @@ def tcplink(sock,addr):
 		#sock.send("Hello".encode())
 		print(data)
 		data=str(data,encoding="utf-8")
-		data=data[:8]
+		voltage=data[0:8]
+		current=data[9:17]
+		power=data[18:26]
+		relay=data[27:35]
 		print('Recv,%s'%data)
+		print('voltage=%s'%voltage)
+		print('current=%s'%current)
+		print('power=%s'%power)
+		print('relay=%s'%relay)
+		#send power parameters via redis
 		if data.find('vol')!= -1:
 		    print('this is vol value')
-		    print(r.rpush("vol_list",data))
-		elif data.find('cur')!= -1:
+		    print(r.rpush("vol_list",voltage))
+		if data.find('cur')!= -1:
 		    print('this is cur value')
-		    print(r.rpush("cur_list",data))
+		    print(r.rpush("cur_list",current))
+		if data.find('pwr')!= -1:
+		    print('this is pwr value')
+		    print(r.rpush("pwr_list",power))
+		if data.find('rely')!= -1:
+		    print('this is rely value')
+		    print(r.rpush("rely_list",relay))
 		da = Dao()
 		power_data = PowerPara()
-		power_data.vol = data
+		power_data.vol = voltage
 		power_data.cur = "123"
 		power_data.power = "22"
 		da.insertData(power_data,2,3)

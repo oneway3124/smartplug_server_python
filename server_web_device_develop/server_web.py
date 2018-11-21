@@ -306,6 +306,31 @@ device_single={
 }	
 class device_id(Resource):
     def get(self,dev_id):
+        relay_state=r.lpop("rely_list")
+        print(relay_state)
+        if relay_state is None:
+            relay_state='on'
+            print('default is on')
+		
+        device_single={
+			'error':'succ',
+			'data':
+            {
+			    'dev_id':'12345',
+			    'desc':'wangwei',
+			    'online':'true',
+			    'address':'jijiaolou',
+			    'location':{'lon':'104.087556','lat':'30.637192'},
+			    'vol':'230',
+			    'cur':'2',
+			    'pwr':'10',
+			    'tmp':'25',
+			    'rssi':'-65',
+			    'rely':relay_state,
+			    'action':'on',
+			    'owner_info':'wsn'			
+            }
+        }			
         return device_single
 
 
